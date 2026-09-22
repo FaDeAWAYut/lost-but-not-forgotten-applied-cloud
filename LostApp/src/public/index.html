@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>LostApp</title>
+    <title>LBNF</title>
   </head>
   <body>
-    <h1>Welcome to "Lost but Not Forgotten"</h1>
-    <h3>A platform where to help students reconnect with their missing things...</h3>
+    <h1>Welcome to "Lost... But Not Forgotten"</h1>
+    <h3>A platform to help students reconnect with their missing things...</h3>
     <button id="foundBtn">I found something</button>
     <button id="lookingBtn">I'm looking for something</button>
+    <script>
+      document.getElementById('foundBtn').addEventListener('click', () => {
+        window.location.href = '/found.html';
+      });
+      document.getElementById('lookingBtn').addEventListener('click', () => {
+        window.location.href = '/looking.html';
+      });
+    </script>
   </body>
 </html>
