@@ -1,0 +1,34 @@
+services:
+  app:
+    image: lostapp
+    ports:
+      - 3000:3000
+    volumes:
+      - ./LostApp/src:/app/src
+    environment:
+      TEXTSTORE_HOST: mongoDB
+
+  service:
+    image: lostservice
+    ports:
+      - 4000:4000
+    volumes:
+      - ./LostService/src:/app/src
+    deploy:
+      replicas: 1
+    environment:
+      TEXTSTORE_HOST: mongoDB
+
+  mongoDB:
+    image: mongo
+    restart: always
+    command: --quiet --syslog
+    expose:
+      - "27017"
+    volumes:
+      - mongoDB-data:/data/db
+      - mongo-config:/data/configdb
+
+volumes:
+  mongoDB-data:
+  mongo-config:
