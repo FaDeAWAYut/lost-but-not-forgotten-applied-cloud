@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const itemSchema = new mongoose.Schema({
-  name: String,
+  itemName: String,
   description: String,
+  locationFound: String,
+  contactInfo: String,
 });
-// schema from mongodb
 
 module.exports = mongoose.model("Item", itemSchema);
