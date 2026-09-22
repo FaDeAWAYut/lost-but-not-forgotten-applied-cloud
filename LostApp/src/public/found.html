@@ -5,5 +5,58 @@
   </head>
   <body>
     <h1>Report something you found</h1>
+
+    <form id="foundForm">
+      <div>
+        <label for="itemName">Item Name</label><br>
+        <input type="text" id="itemName" name="itemName">
+      </div>
+
+      <div>
+        <label for="description">Brief Description</label><br>
+        <input type="text" id="description" name="description">
+      </div>
+
+      <div>
+        <label for="locationFound">Location Found</label><br>
+        <input type="text" id="locationFound" name="locationFound">
+      </div>
+
+      <div>
+        <label for="contactInfo">Contact Information</label><br>
+        <input type="text" id="contactInfo" name="contactInfo">
+      </div>
+
+      <button type="button" id="reportBtn">Report</button>
+    </form>
+
+    <script>
+      document.getElementById('reportBtn').addEventListener('click', async () => {
+        const payload = {
+          itemName: document.getElementById('itemName').value,
+          description: document.getElementById('description').value,
+          locationFound: document.getElementById('locationFound').value,
+          contactInfo: document.getElementById('contactInfo').value,
+        };
+
+        try {
+          const response = await fetch('/items', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+
+          if (response.ok) {
+            alert('Item reported successfully!');
+            window.location.href = '/';
+          } else {
+            alert('Something went wrong. Please try again.');
+          }
+        } catch (err) {
+          console.error('Error reporting item:', err);
+          alert('Could not reach the server.');
+        }
+      });
+    </script>
   </body>
 </html>
