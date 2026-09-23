@@ -2,8 +2,12 @@
 <html>
   <head>
     <title>LBNF - Looking for Item</title>
+    <link rel="stylesheet" href="/palette.css">
+    <link rel="stylesheet" href="/form.css">
   </head>
   <body>
+    <button type="button" class="back-btn" id="homeBtn">← Back to Home</button>
+
     <h1>Search for something you're looking for</h1>
 
     <form id="searchForm">
@@ -16,9 +20,13 @@
     </form>
 
     <h2>Reported Items</h2>
-    <ul id="itemList"></ul>
+    <ul id="itemList" class="item-list"></ul>
 
     <script>
+      document.getElementById('homeBtn').addEventListener('click', () => {
+        window.location.href = '/';
+      });
+
       async function loadItems(searchTerm = '') {
         try {
           const url = searchTerm
@@ -37,10 +45,12 @@
 
           items.forEach(item => {
             const li = document.createElement('li');
+            li.className = 'item-card';
             li.innerHTML = `
-              <b>${item.itemName}</b> — ${item.description}<br>
-              Found at: ${item.locationFound}<br>
-              Contact: ${item.contactInfo}
+              <b>${item.itemName}</b>
+              <div>${item.description}</div>
+              <div class="meta">Found at: ${item.locationFound}</div>
+              <div class="meta">Contact: ${item.contactInfo}</div>
             `;
             list.appendChild(li);
           });
