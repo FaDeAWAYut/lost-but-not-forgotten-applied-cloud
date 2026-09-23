@@ -13,21 +13,25 @@
       </div>
 
       <button type="button" id="searchBtn">Search</button>
-    
+    </form>
+
     <h2>Reported Items</h2>
     <ul id="itemList"></ul>
 
     <script>
-      async function loadItems() {
+      async function loadItems(searchTerm = '') {
         try {
-          const response = await fetch('/items');
+          const url = searchTerm
+            ? `/items?search=${encodeURIComponent(searchTerm)}`
+            : '/items';
+          const response = await fetch(url);
           const items = await response.json();
 
           const list = document.getElementById('itemList');
-          list.innerHTML = ''; // clear in case this ever gets called again
+          list.innerHTML = '';
 
           if (items.length === 0) {
-            list.innerHTML = '<li>No items reported yet.</li>';
+            list.innerHTML = '<li>No items found.</li>';
             return;
           }
 
@@ -45,6 +49,11 @@
           document.getElementById('itemList').innerHTML = '<li>Could not load items.</li>';
         }
       }
+
+      document.getElementById('searchBtn').addEventListener('click', () => {
+        const query = document.getElementById('searchQuery').value;
+        loadItems(query);
+      });
 
       loadItems();
     </script>
