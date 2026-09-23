@@ -11,7 +11,7 @@ const backendUrl = `http://${backendHost}:4000/api/items`;
 
 app.get("/items", async (req, res) => {
   try {
-    const response = await axios.get(backendUrl);
+    const response = await axios.get(backendUrl, { params: req.query });
     res.json(response.data);
   } catch (err) {
     res.status(500).json({ error: "Could not reach LostService" });

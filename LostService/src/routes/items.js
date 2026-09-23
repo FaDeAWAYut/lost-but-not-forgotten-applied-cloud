@@ -3,15 +3,16 @@ const router = express.Router();
 const Item = require("../model/Item");
 
 router.get("/", async (req, res) => {
-  const items = await Item.find();
+  const { search } = req.query;
+
+  let filter = {};
+  if (search) {
+    filter.itemName = { $regex: search, $options: "i" };
+  }
+
+  const items = await Item.find(filter);
   console.log("Amount Retrieved:", items.length);
   res.json(items);
-});
-
-router.get("/:id", async (req, res) => {
-  const item = await Item.findById(req.params.id);
-  if (!item) return res.status(404).json({ error: "Not found" });
-  res.json(item);
 });
 
 router.post("/", async (req, res) => {
