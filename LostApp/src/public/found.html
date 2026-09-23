@@ -2,36 +2,51 @@
 <html>
   <head>
     <title>LBNF - Report Found Item</title>
+    <link rel="stylesheet" href="/palette.css">
+    <link rel="stylesheet" href="/form.css">
   </head>
   <body>
+    <button type="button" class="back-btn" id="homeBtn">← Back to Home</button>
+
     <h1>Report something you found</h1>
 
     <form id="foundForm">
       <div>
         <label for="itemName">Item Name</label><br>
-        <input type="text" id="itemName" name="itemName">
+        <input type="text" id="itemName" name="itemName" required>
       </div>
 
       <div>
         <label for="description">Brief Description</label><br>
-        <input type="text" id="description" name="description">
+        <input type="text" id="description" name="description" required>
       </div>
 
       <div>
         <label for="locationFound">Location Found</label><br>
-        <input type="text" id="locationFound" name="locationFound">
+        <input type="text" id="locationFound" name="locationFound" required>
       </div>
 
       <div>
         <label for="contactInfo">Contact Information</label><br>
-        <input type="text" id="contactInfo" name="contactInfo">
+        <input type="text" id="contactInfo" name="contactInfo" required>
       </div>
 
       <button type="button" id="reportBtn">Report</button>
     </form>
 
     <script>
+      document.getElementById('homeBtn').addEventListener('click', () => {
+        window.location.href = '/';
+      });
+
       document.getElementById('reportBtn').addEventListener('click', async () => {
+        const form = document.getElementById('foundForm');
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
         const payload = {
           itemName: document.getElementById('itemName').value,
           description: document.getElementById('description').value,

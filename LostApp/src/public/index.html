@@ -2,12 +2,16 @@
 <html>
   <head>
     <title>LBNF</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/palette.css">
   </head>
   <body>
     <h1>Welcome to "Lost... But Not Forgotten"</h1>
     <h3>A platform to help students reconnect with their missing things...</h3>
-    <button id="foundBtn">I found something</button>
-    <button id="lookingBtn">I'm looking for something</button>
+    <div>
+      <button id="foundBtn">I found something</button>
+      <button id="lookingBtn">I'm looking for something</button>
+    </div>
     <script>
       document.getElementById('foundBtn').addEventListener('click', () => {
         window.location.href = '/found.html';

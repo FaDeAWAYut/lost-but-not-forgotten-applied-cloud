@@ -8,7 +8,7 @@ const dbPort = "27017";
 const dbName = "mongoDB";
 
 const app = express();
-app.use(cors()); // lets LostApp make requests to this server from a different origin/port
+app.use(cors());
 app.use(express.json());
 
 if (!process.env.TEXTSTORE_HOST) {
@@ -25,6 +25,6 @@ mongoose
     console.error(" trying to connect to server:", connection);
   });
 
-app.use("/api/items", itemsRouter); // mounts the router at this path
+app.use("/api/items", itemsRouter);
 
 app.listen(4000, () => console.log("LostService running on port 4000"));
