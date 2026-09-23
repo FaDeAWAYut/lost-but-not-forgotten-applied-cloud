@@ -4,6 +4,7 @@ const Item = require("../model/Item");
 
 router.get("/", async (req, res) => {
   const items = await Item.find();
+  console.log("Amount Retrieved:", items.length);
   res.json(items);
 });
 

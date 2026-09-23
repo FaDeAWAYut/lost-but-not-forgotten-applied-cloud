@@ -5,5 +5,48 @@
   </head>
   <body>
     <h1>Search for something you're looking for</h1>
+
+    <form id="searchForm">
+      <div>
+        <label for="searchQuery">Item Name</label><br>
+        <input type="text" id="searchQuery" name="searchQuery">
+      </div>
+
+      <button type="button" id="searchBtn">Search</button>
+    
+    <h2>Reported Items</h2>
+    <ul id="itemList"></ul>
+
+    <script>
+      async function loadItems() {
+        try {
+          const response = await fetch('/items');
+          const items = await response.json();
+
+          const list = document.getElementById('itemList');
+          list.innerHTML = ''; // clear in case this ever gets called again
+
+          if (items.length === 0) {
+            list.innerHTML = '<li>No items reported yet.</li>';
+            return;
+          }
+
+          items.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+              <b>${item.itemName}</b> — ${item.description}<br>
+              Found at: ${item.locationFound}<br>
+              Contact: ${item.contactInfo}
+            `;
+            list.appendChild(li);
+          });
+        } catch (err) {
+          console.error('Error loading items:', err);
+          document.getElementById('itemList').innerHTML = '<li>Could not load items.</li>';
+        }
+      }
+
+      loadItems();
+    </script>
   </body>
 </html>
