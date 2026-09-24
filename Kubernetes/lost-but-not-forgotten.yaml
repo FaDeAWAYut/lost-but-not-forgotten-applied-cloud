@@ -1,0 +1,145 @@
+# LostApp (frontend/gateway service)
+# --------------------
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lostapp-service
+  labels:
+    app: lostapp
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 3000
+    nodePort: 30001
+    protocol: TCP
+  selector:
+    app: lostapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lostapp
+  labels:
+    app: lostapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lostapp
+  template:
+    metadata:
+      labels:
+        app: lostapp
+    spec:
+      containers:
+      - name: lostapp
+        image: fadeawayut/lostapp:v1
+        ports:
+        - containerPort: 3000
+        env:
+        - name: BACKEND_HOST
+          value: "lostservice-service"
+
+# LostService (backend/API service)
+# --------------------
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lostservice-service
+  labels:
+    app: lostservice
+spec:
+  ports:
+  - name: http
+    port: 4000
+    protocol: TCP
+  selector:
+    app: lostservice
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lostservice
+  labels:
+    app: lostservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lostservice
+  template:
+    metadata:
+      labels:
+        app: lostservice
+    spec:
+      containers:
+      - name: lostservice
+        image: fadeawayut/lostservice:v1
+        ports:
+        - containerPort: 4000
+        env:
+        - name: TEXTSTORE_HOST
+          value: "textstore-service"
+
+# TextStore (MongoDB database)
+# --------------------
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: textstore-service
+  labels:
+    app: textstore
+spec:
+  ports:
+  - port: 27017
+    targetPort: mongodb-port
+  selector:
+    app: textstore
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: textstore
+  labels:
+    app: textstore
+spec:
+  serviceName: textstore-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: textstore
+  template:
+    metadata:
+      labels:
+        app: textstore
+    spec:
+      containers:
+      - name: textstore
+        image: mongo
+        ports:
+        - containerPort: 27017
+          name: mongodb-port
+        volumeMounts:
+        - name: textstore-data
+          mountPath: /data/db
+        - name: mongo-config
+          mountPath: /data/configdb
+  volumeClaimTemplates:
+    - metadata:
+        name: textstore-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 100Mi
+    - metadata:
+        name: mongo-config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Mi
